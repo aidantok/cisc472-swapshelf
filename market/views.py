@@ -55,7 +55,11 @@ def listing_sold(request, pk):
 @login_required
 @require_POST
 def listing_delete(request, pk):
-    listing = get_object_or_404(Listing, pk=pk, owner=request.user)
+    listings = Listing.objects.all()
+    if not request.user.is_staff:
+        listings = listings.filter(owner=request.user)
+    
+    listing = get_object_or_404(listings, pk=pk)
     listing.status = "removed"
     listing.save(update_fields=["status"])
     return redirect("home")

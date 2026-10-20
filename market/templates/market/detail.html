@@ -23,5 +23,11 @@
   {% else %}
     <p><a href="{% url 'sign_in' %}">Sign in to message the seller</a></p>
   {% endif %}
+  {% if user == listing.owner or user.is_staff %}
+    <form method="post" action="{% url 'listing_delete' listing.pk %}">
+      {% csrf_token %}
+      <button type="submit">Remove listing</button>
+    </form>
+  {% endif %}
 </article>
 {% endblock %}
